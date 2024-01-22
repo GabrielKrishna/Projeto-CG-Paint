@@ -12,14 +12,14 @@ public class DrawingPanel extends JPanel {
 
     private JComboBox<String> primitiveComboBox;
     private JComboBox<String> algorithmComboBox;
-    private JComboBox<String> colorComboBox;
+    //private JComboBox<String> colorComboBox;
 
     // Construtor modificado para receber JComboBox
 
-    public DrawingPanel(JComboBox<String> primitiveComboBox, JComboBox<String> algorithmComboBox, JComboBox<String> colorComboBox) {
-            this.primitiveComboBox = primitiveComboBox;
-            this.algorithmComboBox = algorithmComboBox;
-            this.colorComboBox = colorComboBox;
+    public DrawingPanel(JComboBox<String> primitiveComboBox, JComboBox<String> algorithmComboBox) {
+        this.primitiveComboBox = primitiveComboBox;
+        this.algorithmComboBox = algorithmComboBox;
+        //this.colorComboBox = colorComboBox;
         setPreferredSize(new Dimension(600, 400));
         setBackground(Color.WHITE);
 
@@ -75,6 +75,7 @@ public class DrawingPanel extends JPanel {
             }
         });
     }
+    /*
     private Color getSelectedColor() {
         String selectedColor = (String) colorComboBox.getSelectedItem();
         switch (selectedColor) {
@@ -88,17 +89,12 @@ public class DrawingPanel extends JPanel {
                 return Color.RED;
         }
     }
-    private void requestRadius() {
-        // Pede ao usuário para inserir o raio usando um diálogo de entrada
-        String input = JOptionPane.showInputDialog("Digite o raio da circunferência:");
-        try {
-            radius = Integer.parseInt(input);
-        } catch (NumberFormatException e) {
-            // Tratamento de erro se o usuário inserir algo que não seja um número
-            JOptionPane.showMessageDialog(this, "Por favor, insira um valor válido para o raio.", "Erro", JOptionPane.ERROR_MESSAGE);
-            requestRadius(); // Tenta novamente
-        }
+    */
+
+    private void clearDrawing() {
+        repaint();
     }
+
     private void drawSelectedPrimitive(int... args) {
         Graphics g = getGraphics();
 
@@ -147,14 +143,14 @@ public class DrawingPanel extends JPanel {
             case 2: //Circunferências
                 switch (algType) {
                     case 0:
-
+                        CircleAlgorithms.algParam(g, args[0]);
                         break;
                     case 1:
-
+                        CircleAlgorithms.algIncSem(g, args[0]);
                         System.out.println("8");
                         break;
                     case 2:
-                        CircleAlgorithms.algBres(g, args[0], centerX, centerY);
+                        CircleAlgorithms.algBres(g, args[0]);
                         System.out.println("9");
                         break;
                     default:
