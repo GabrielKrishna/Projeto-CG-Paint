@@ -5,27 +5,24 @@ public class PaintFrame extends JFrame {
 
     private JComboBox<String> primitiveComboBox;
     private JComboBox<String> algorithmComboBox;
-
-    //private JComboBox<String> colorComboBox;
+    private JComboBox<String> colorComboBox;
 
     public PaintFrame() {
         setTitle("Mini Paint");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 
-        // Drop-down para seleção de primitivas
         primitiveComboBox = new JComboBox<>(new String[]{"Linhas", "Poligonos", "Circunferencias"});
         primitiveComboBox.addActionListener(e -> updateAlgorithmComboBox());
 
-        // Drop-down para seleção de algoritmos
         algorithmComboBox = new JComboBox<>();
-        updateAlgorithmComboBox(); // Inicializa com as opções de linhas
+        updateAlgorithmComboBox();
         algorithmComboBox.addActionListener(e -> {
             clearDrawing();
         });
 
-        //String[] colors = {"Vermelho", "Verde", "Azul"};
-        //colorComboBox = new JComboBox<>(colors);
+        String[] colors = {"Vermelho", "Verde", "Azul"};
+        colorComboBox = new JComboBox<>(colors);
 
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Desenho", createDrawingPanel());
@@ -35,8 +32,8 @@ public class PaintFrame extends JFrame {
         controlPanel.add(primitiveComboBox);
         controlPanel.add(new JLabel("Algoritmo:"));
         controlPanel.add(algorithmComboBox);
-        //controlPanel.add(new JLabel("Cores"));
-        //controlPanel.add(colorComboBox);
+        controlPanel.add(new JLabel("Cores"));
+        controlPanel.add(colorComboBox);
 
         getContentPane().add(controlPanel, BorderLayout.NORTH);
         getContentPane().add(tabbedPane, BorderLayout.CENTER);
@@ -54,21 +51,20 @@ public class PaintFrame extends JFrame {
                 algType = new String[]{"Analitico", "DDA", "Bresenham"};
                 break;
             case 1: //Polígonos
-                algType = new String[]{"Varredura", "BoundaryFill", "Analise Geometrica"};
+                algType= new String[]{"Varredura", "BoundaryFill", "Analise Geometrica"};
                 break;
             case 2: //Circunferência
-                algType = new String[]{"Parametrica", "Incremental com Simetria", "Bresenham"};
+                algType= new String[]{"Parametrica", "Incremental com Simetria", "Bresenham"};
                 break;
             default:
                 algType = new String[]{"Analitico", "DDA", "Bresenham"};
                 break;
-        }
-        ;
+        };
         algorithmComboBox.setModel(new DefaultComboBoxModel<>(algType));
     }
 
     private DrawingPanel createDrawingPanel() {
-        return new DrawingPanel(primitiveComboBox, algorithmComboBox);
+        return new DrawingPanel(primitiveComboBox, algorithmComboBox, colorComboBox);
     }
 
     private void clearDrawing() {

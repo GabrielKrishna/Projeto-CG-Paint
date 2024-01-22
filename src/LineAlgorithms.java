@@ -66,7 +66,6 @@ public class LineAlgorithms {
             c = 2 * dx;
             m = 2 * dy;
             System.out.println(c + "-" + m);
-            //if(incX < 0) dx++;
             for (; ; ) {
                 putPixel(g, x, y);
                 if (x == xf) break;
@@ -82,7 +81,6 @@ public class LineAlgorithms {
             c = 2 * dy;
             m = 2 * dx;
             System.out.println(c + "-" + m);
-            //if(incY < 0) dy++;
             for (; ; ) {
                 putPixel(g, x, y);
                 if (y == yf) break;

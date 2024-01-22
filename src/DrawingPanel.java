@@ -6,21 +6,20 @@ import java.awt.event.MouseEvent;
 public class DrawingPanel extends JPanel {
 
     public int primitiveType = 0;
-    private int startX, startY; // Armazenar as coordenadas iniciais do clique
-    private int centerX, centerY; // Armazenar as coordenadas do centro
-    private int radius; // Armazenar o raio
+    private int startX, startY;
+    public int centerX, centerY;
+    private int radius;
 
     private JComboBox<String> primitiveComboBox;
     private JComboBox<String> algorithmComboBox;
-    //private JComboBox<String> colorComboBox;
+    private JComboBox<String> colorComboBox;
 
-    // Construtor modificado para receber JComboBox
 
-    public DrawingPanel(JComboBox<String> primitiveComboBox, JComboBox<String> algorithmComboBox) {
+    public DrawingPanel(JComboBox<String> primitiveComboBox, JComboBox<String> algorithmComboBox, JComboBox<String> colorComboBox) {
         this.primitiveComboBox = primitiveComboBox;
         this.algorithmComboBox = algorithmComboBox;
-        //this.colorComboBox = colorComboBox;
-        setPreferredSize(new Dimension(600, 400));
+        this.colorComboBox = colorComboBox;
+        setPreferredSize(new Dimension(1600, 900));
         setBackground(Color.WHITE);
 
         addMouseListener(new MouseAdapter() {
@@ -41,18 +40,14 @@ public class DrawingPanel extends JPanel {
 
             private void handleLineClick(MouseEvent e) {
                 if (startX == 0 && startY == 0) {
-                    // Se as coordenadas iniciais ainda não foram definidas
                     startX = e.getX();
                     startY = e.getY();
                 } else {
-                    // Coordenadas finais no segundo clique
                     int endX = e.getX();
                     int endY = e.getY();
 
-                    // Desenha a linha usando o algoritmo selecionado
-                    drawSelectedPrimitive(startX, startY, endX, endY);
+                    drawSelectedPrimitive(getSelectedColor(), startX, startY, endX, endY);
 
-                    // Zera as coordenadas iniciais para o próximo clique
                     startX = 0;
                     startY = 0;
                 }
@@ -60,22 +55,32 @@ public class DrawingPanel extends JPanel {
 
             private void handleCircleClick(MouseEvent e) {
                 if (centerX == 0 && centerY == 0) {
-                    // Se as coordenadas do centro ainda não foram definidas
                     centerX = e.getX();
                     centerY = e.getY();
-                    radius = 250;
 
-                    // Desenha a circunferência com as coordenadas e o raio obtidos
-                    drawSelectedPrimitive(radius);
+                    String raioStr = JOptionPane.showInputDialog(DrawingPanel.this, "raio do círculo:");
 
-                    // Limpar as coordenadas do centro para a próxima circunferência
+                    try {
+                        if (raioStr != null) {
+                            radius = (int) Double.parseDouble(raioStr);
+                        } else {
+                            return;
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(DrawingPanel.this, "Insira um valor válido.");
+                        return;
+                    }
+
+
+                    drawSelectedPrimitive(getSelectedColor(), radius, centerX, centerY);
+
                     centerX = 0;
                     centerY = 0;
                 }
             }
         });
     }
-    /*
+
     private Color getSelectedColor() {
         String selectedColor = (String) colorComboBox.getSelectedItem();
         switch (selectedColor) {
@@ -89,33 +94,25 @@ public class DrawingPanel extends JPanel {
                 return Color.RED;
         }
     }
-    */
 
-    private void clearDrawing() {
-        repaint();
-    }
-
-    private void drawSelectedPrimitive(int... args) {
+    private void drawSelectedPrimitive(Color color, int... args) {
         Graphics g = getGraphics();
+        g.setColor(color);
 
         int primitiveType = primitiveComboBox.getSelectedIndex();
         int algType = algorithmComboBox.getSelectedIndex();
 
         switch (primitiveType) {
-            case 0: //Linhas
-                // Chama o método de desenho de linhas com o algoritmo selecionado
+            case 0:
                 switch (algType) {
                     case 0:
                         LineAlgorithms.algAnalitic(g, args[0], args[1], args[2], args[3]);
-                        System.out.println("0");
                         break;
                     case 1:
-                        LineAlgorithms.algDDA(g, args[0], args[1], args[2], args[3]); //DDA
-                        System.out.println("1");
+                        LineAlgorithms.algDDA(g, args[0], args[1], args[2], args[3]);
                         break;
                     case 2:
-                        LineAlgorithms.algBres(g, args[0], args[1], args[2], args[3]); //Bresenham
-                        System.out.println("2");
+                        LineAlgorithms.algBres(g, args[0], args[1], args[2], args[3]);
                         break;
                     default:
                         System.out.println("default");
@@ -143,15 +140,13 @@ public class DrawingPanel extends JPanel {
             case 2: //Circunferências
                 switch (algType) {
                     case 0:
-                        CircleAlgorithms.algParam(g, args[0]);
+                        CircleAlgorithms.algParam(g, args[0], args[1], args[2]);
                         break;
                     case 1:
-                        CircleAlgorithms.algIncSem(g, args[0]);
-                        System.out.println("8");
+                        CircleAlgorithms.algIncSem(g, args[0], args[1], args[2]);
                         break;
                     case 2:
-                        CircleAlgorithms.algBres(g, args[0]);
-                        System.out.println("9");
+                        CircleAlgorithms.algBres(g, args[0], args[1], args[2]);
                         break;
                     default:
                         System.out.println("default");
