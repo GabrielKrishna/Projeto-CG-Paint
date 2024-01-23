@@ -6,7 +6,7 @@ import java.awt.event.MouseEvent;
 public class DrawingPanel extends JPanel {
 
     public int primitiveType = 0;
-    private int startX, startY;
+    private int startX, startY, endX, endY;
     public int centerX, centerY;
     private int radius;
 
@@ -22,6 +22,7 @@ public class DrawingPanel extends JPanel {
         setPreferredSize(new Dimension(1600, 900));
         setBackground(Color.WHITE);
 
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -30,7 +31,7 @@ public class DrawingPanel extends JPanel {
                         handleLineClick(e);
                         break;
                     case 1: //Poligonos
-                        handleLineClick(e);
+                        handlePoligonClick(e);
                         break;
                     case 2: //Circunferências
                         handleCircleClick(e);
@@ -43,8 +44,23 @@ public class DrawingPanel extends JPanel {
                     startX = e.getX();
                     startY = e.getY();
                 } else {
-                    int endX = e.getX();
-                    int endY = e.getY();
+                    endX = e.getX();
+                    endY = e.getY();
+
+                    drawSelectedPrimitive(getSelectedColor(), startX, startY, endX, endY);
+
+                    startX = 0;
+                    startY = 0;
+                }
+            }
+
+            private void handlePoligonClick(MouseEvent e) {
+                if (startX == 0 && startY == 0) {
+                    startX = e.getX();
+                    startY = e.getY();
+                } else {
+                    endX = e.getX();
+                    endY = e.getY();
 
                     drawSelectedPrimitive(getSelectedColor(), startX, startY, endX, endY);
 
@@ -58,7 +74,7 @@ public class DrawingPanel extends JPanel {
                     centerX = e.getX();
                     centerY = e.getY();
 
-                    String raioStr = JOptionPane.showInputDialog(DrawingPanel.this, "raio do círculo:");
+                    String raioStr = JOptionPane.showInputDialog(DrawingPanel.this, "Raio do círculo:");
 
                     try {
                         if (raioStr != null) {
@@ -157,6 +173,7 @@ public class DrawingPanel extends JPanel {
             default:
                 System.out.println("default");
                 break;
+
         }
     }
 }
